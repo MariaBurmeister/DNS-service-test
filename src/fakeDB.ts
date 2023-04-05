@@ -47,12 +47,23 @@ export const getQTypeResponse = (qName: string, qType: QType) => {
       return [responseMap.SOA];
     case "NS":
       return [responseMap.NS1, responseMap.NS2];
-    default:
+    case "A":
       return [
         responseMap.SOA,
         responseMap.NS1,
         responseMap.NS2,
         responseMap.ANY,
       ];
+    case "CNAME":
+      return [
+        responseMap.SOA,
+        responseMap.NS1,
+        responseMap.NS2,
+        responseMap.ANY,
+      ];
+    default:
+      throw new Error(
+        "Bad Request, a qType (A | NS | CNAME | SOA) parameter is required"
+      );
   }
 };

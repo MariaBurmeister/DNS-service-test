@@ -4,7 +4,7 @@ export const lookup = Router();
 
 lookup.get("/", (req: Request, res: Response) => {});
 
-const checkIfManagedByUs = lookup.param(
+lookup.param(
   "qName",
   (req: Request, res: Response, next: NextFunction, qName) => {
     if (isManagedByUs(qName)) {
@@ -16,14 +16,16 @@ const checkIfManagedByUs = lookup.param(
   }
 );
 
-const getResponseForQType = lookup.param(
+lookup.param(
   "qType",
   (req: Request, res: Response, next: NextFunction, qType) => {
     const { qName } = req.params;
-    console.log(qName, qType);
-    const response = getQTypeResponse(qName, qType);
-    res.status(200).json(response);
-    console.log(res);
+    try {
+      const response = getQTypeResponse(qName, qType);
+      res.status(200).json(response);
+    } catch (e: any) {
+      res.status(400).send(e.message);
+    }
     next();
   }
 );
